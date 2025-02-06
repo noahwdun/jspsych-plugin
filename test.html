@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My experiment</title>
+    <script src="https://unpkg.com/jspsych@8.2.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
+    <script src="/Users/noahduncan/Experiment/plugin-moving-dots-2/dist/index.browser.js"></script>
+    <link href="https://unpkg.com/jspsych@8.2.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <style>
+      body {
+        background-color: white;
+      }
+      canvas {
+        background-color: rgb(191, 191, 191);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="canvas-container"></div>
+    <input type="file" id="file-input" />
+  </body>
+  <script>
+    function readFile(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (event) => resolve(JSON.parse(event.target.result));
+        reader.onerror = (error) => reject(error);
+        reader.readAsText(file);
+      });
+    }
+
+    document.getElementById('file-input').addEventListener('change', async (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const playbackData = await readFile(file);
+
+        /* initialize jsPsych */
+        var jsPsych = initJsPsych({
+          on_finish: function() {
+            const trialData = jsPsych.data.get().values();
+            const mouseData = trialData.map(trial => trial.mouse_data).flat();
+            const blob = new Blob([JSON.stringify(mouseData)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'experiment_data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+          }
+        });
+
+        /* create timeline */
+        var timeline = [];
+
+        /* define welcome message trial */
+        var movingdots = {
+          type: jsPsychPluginMovingDots2,
+          control_levels: [30, 70, 100], // Control change levels
+          dot_count: 10, // Number of dots
+          flash_duration: 200, // Flash duration in milliseconds
+          trial_duration: 5000, // Trial duration in milliseconds
+          initial_control_level: 0, // Initial control level
+          control_change_level: 30, // Control change level
+          playback: playbackData // Loaded playback data
+        };
+        timeline.push(movingdots);
+        /* start the experiment */
+        jsPsych.run(timeline);
+      }
+    });
+  </script>
+</html>
