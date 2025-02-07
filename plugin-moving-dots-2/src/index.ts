@@ -38,26 +38,29 @@ const info = <const>{
       type: ParameterType.INT,
       default: 30,
     },
+    /** Height of the diodes on the side of the screen */
     diode_heights: {
       type: ParameterType.INT,
       array: true,
       default: [10, 70, 130, 190]
     },
+    /** Whether the trial is a practice trial */
+    practice_trial: {
+      type: ParameterType.BOOL,
+      default: false
+    },
     /** 2-dimensional array of mouse data for playback */
     playback: {
       type: ParameterType.COMPLEX,
       array: true,
-      default: [] as Array<{ dx: number; dy: number; t: number }>,
+      default: [] as Array<{ dx: number; dy: number }>,
       params: {
         dx: {
           type: ParameterType.INT,
         },
         dy: {
           type: ParameterType.INT,
-        },
-        t: {
-          type: ParameterType.INT,
-        },
+        }
       },
     },
   },
@@ -66,6 +69,20 @@ const info = <const>{
     control_change: {
       type: ParameterType.INT,
     },
+    mouse_data: {
+      type: ParameterType.COMPLEX,
+      array: true,
+      nested: {
+        /** Change in x position of the mouse */
+        dx: {
+          type: ParameterType.INT,
+        },
+        /** Change in y position of the mouse */
+        dy: {
+          type: ParameterType.INT,
+        },
+      },
+    }
   },
   // When you run build on your plugin, citations will be generated here based on the information in the CITATION.cff file.
   citations: "__CITATIONS__",
@@ -234,7 +251,7 @@ class MovingDots2Plugin implements JsPsychPlugin<Info> {
      * @param isFlashing - Whether the dot is currently flashing.
      * @param diodeHeights - Array of heights for the boxes.
      */
-    function renderSideBoxes(initialControl: number, controlChange: number, isFlashing: boolean, diodeHeights: number[]) {
+    function renderSideBoxes(initialControl: number, controlChange: number, isFlashing: boolean, diodeHeights: number[], practiceTrial: boolean) {
       const box1 = document.createElement("div");
       const box2 = document.createElement("div");
       const box3 = document.createElement("div");
@@ -271,7 +288,7 @@ class MovingDots2Plugin implements JsPsychPlugin<Info> {
       box4.style.right = "10px";
       box4.style.height = "5vh";
       box4.style.width = "5vh";
-      box4.style.backgroundColor = isFlashing ? "white" : "black";
+      box4.style.backgroundColor = isFlashing && !practiceTrial ? "white" : "black";
 
       if (isFlashing) {
         box1.style.backgroundColor = initialControl === 100 ? "white" : "black";
@@ -346,7 +363,7 @@ class MovingDots2Plugin implements JsPsychPlugin<Info> {
       }
 
       // Render side boxes
-      renderSideBoxes(trial.initial_control_level, trial.control_change_level, isFlashing, trial.diode_heights);
+      renderSideBoxes(trial.initial_control_level, trial.control_change_level, isFlashing, trial.diode_heights, trial.practice_trial);
 
       // run the next loop of the animation
       updateDots(dx, dy);
