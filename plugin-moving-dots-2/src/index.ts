@@ -8,12 +8,6 @@ const info = <const>{
   name: "plugin-moving-dots-2",
   version: version,
   parameters: {
-    /** Array of control change levels (e.g., 30%, 70%, 100%) */
-    control_levels: {
-      type: ParameterType.INT,
-      array: true,
-      default: [30, 70, 100],
-    },
     /** Number of dots to display on the screen */
     dot_count: {
       type: ParameterType.INT,
@@ -38,11 +32,6 @@ const info = <const>{
     post_flash_duration: {
       type: ParameterType.INT,
       default: 1500,
-    },
-    /** Total duration of the trial in milliseconds */
-    trial_duration: {
-      type: ParameterType.INT,
-      default: 5000,
     },
     /** Initial level of control the mouse has over the dots (0-100) */
     initial_control_level: {
@@ -101,9 +90,9 @@ class MovingDots2Plugin implements JsPsychPlugin<Info> {
     // Create a canvas to display the dots
     const canvas = document.createElement("canvas");
 
-    //FIND THIS
-    canvas.width = 800;
-    canvas.height = 600;
+    // Change canvas size to window size
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
     display_element.appendChild(canvas);
     const ctx = canvas.getContext("2d");
@@ -246,7 +235,7 @@ class MovingDots2Plugin implements JsPsychPlugin<Info> {
       // working backwards from the end of the trial
       
       // check if the trial is over
-      if(elapsedTime >= trial.trial_duration){
+      if(elapsedTime >= trial.pre_flash_duration + trial.post_flash_duration) {
         endTrial();
         return;
       }
@@ -270,7 +259,7 @@ class MovingDots2Plugin implements JsPsychPlugin<Info> {
       // run the next loop of the animation
       updateDots(dx, dy);
       renderDotsAndCross();
-      data.push({ dx, dy, elapsedTime, frame });
+      data.push({ dx, dy });
       dx = 0;
       dy = 0;
       frame++;

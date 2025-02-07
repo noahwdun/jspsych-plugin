@@ -35,11 +35,6 @@ declare const info: {
             readonly type: ParameterType.INT;
             readonly default: 1500;
         };
-        /** Total duration of the trial in milliseconds */
-        readonly trial_duration: {
-            readonly type: ParameterType.INT;
-            readonly default: 5000;
-        };
         /** Initial level of control the mouse has over the dots (0-100) */
         readonly initial_control_level: {
             readonly type: ParameterType.INT;
@@ -125,11 +120,6 @@ declare class MovingDots2Plugin implements JsPsychPlugin<Info> {
             readonly post_flash_duration: {
                 readonly type: ParameterType.INT;
                 readonly default: 1500;
-            };
-            /** Total duration of the trial in milliseconds */
-            readonly trial_duration: {
-                readonly type: ParameterType.INT;
-                readonly default: 5000;
             };
             /** Initial level of control the mouse has over the dots (0-100) */
             readonly initial_control_level: {

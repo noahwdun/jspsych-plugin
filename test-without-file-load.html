@@ -20,21 +20,20 @@
   <body>
   </body>
   <script>
-    /* initialize jsPsych */
-    var jsPsych = initJsPsych({
-      on_finish: function() {
-        console.log('Experiment finished');
-        // const trialData = jsPsych.data.get().values();
-        // const mouseData = trialData.map(trial => trial.mouse_data).flat();
-        // const blob = new Blob([JSON.stringify(mouseData)], { type: 'application/json' });
-        // const url = URL.createObjectURL(blob);
-        // const a = document.createElement('a');
-        // a.href = url;
-        // a.download = 'experiment_data.json';
-        // a.click();
-        // URL.revokeObjectURL(url);
-      }
-    });
+        /* initialize jsPsych */
+        var jsPsych = initJsPsych({
+          on_finish: function() {
+            const trialData = jsPsych.data.get().values();
+            const mouseData = trialData.map(trial => trial.mouse_data).flat();
+            const blob = new Blob([JSON.stringify(mouseData)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'experiment_data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+          }
+        });
 
     /* create timeline */
     var timeline = [];
@@ -42,12 +41,12 @@
     /* define welcome message trial */
     var movingdots = {
       type: jsPsychPluginMovingDots2,
-      control_levels: [30, 70, 100], // Control change levels
       dot_count: 10, // Number of dots
       flash_duration: 200, // Flash duration in milliseconds
-      trial_duration: 5000, // Trial duration in milliseconds
+      pre_flash_duration: 1500, // Pre-flash duration in milliseconds
+      post_flash_duration: 10000, // Post-flash duration in milliseconds
       initial_control_level: 100, // Initial control level
-      control_change_level: 100, // Control change level
+      control_change_level: 0, // Control change level
       playback: trajectory // Loaded playback data
     };
     timeline.push(movingdots);

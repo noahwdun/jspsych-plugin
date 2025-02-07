@@ -38,11 +38,6 @@ var jsPsychPluginMovingDots2 = (function (jspsych) {
         type: jspsych.ParameterType.INT,
         default: 1500
       },
-      /** Total duration of the trial in milliseconds */
-      trial_duration: {
-        type: jspsych.ParameterType.INT,
-        default: 5e3
-      },
       /** Initial level of control the mouse has over the dots (0-100) */
       initial_control_level: {
         type: jspsych.ParameterType.INT,
@@ -89,8 +84,8 @@ var jsPsychPluginMovingDots2 = (function (jspsych) {
     }
     trial(display_element, trial) {
       const canvas = document.createElement("canvas");
-      canvas.width = 800;
-      canvas.height = 600;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
       display_element.appendChild(canvas);
       const ctx = canvas.getContext("2d");
       const dots = [];
@@ -180,7 +175,7 @@ var jsPsychPluginMovingDots2 = (function (jspsych) {
       const animate = () => {
         const currentTime = Date.now();
         const elapsedTime = currentTime - startTime;
-        if (elapsedTime >= trial.trial_duration) {
+        if (elapsedTime >= trial.pre_flash_duration + trial.post_flash_duration) {
           endTrial();
           return;
         }
@@ -199,7 +194,7 @@ var jsPsychPluginMovingDots2 = (function (jspsych) {
         }
         updateDots(dx, dy);
         renderDotsAndCross();
-        data.push({ dx, dy, elapsedTime, frame });
+        data.push({ dx, dy });
         dx = 0;
         dy = 0;
         frame++;
