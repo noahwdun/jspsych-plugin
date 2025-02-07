@@ -158,7 +158,8 @@ class MovingDots2Plugin {
       });
     };
     const endTrial = () => {
-      document.removeEventListener("mousemove", mouseMoveListener);
+      document.exitPointerLock();
+      canvas.removeEventListener("mousemove", mouseMoveListener);
       display_element.innerHTML = "";
       this.jsPsych.finishTrial({
         control_change: controlChange,
@@ -263,7 +264,8 @@ class MovingDots2Plugin {
     };
     initializeDots();
     renderDotsAndCross();
-    document.addEventListener("mousemove", mouseMoveListener);
+    canvas.requestPointerLock({ unadjustedMovement: false });
+    canvas.addEventListener("mousemove", mouseMoveListener);
     animate();
   }
 }
