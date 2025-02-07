@@ -15,10 +15,25 @@ declare const info: {
             readonly type: ParameterType.INT;
             readonly default: 10;
         };
+        /** Maximum initial distance from the center location for dots */
+        readonly max_initial_distance: {
+            readonly type: ParameterType.INT;
+            readonly default: 100;
+        };
         /** Duration of the flash in milliseconds */
         readonly flash_duration: {
             readonly type: ParameterType.INT;
             readonly default: 200;
+        };
+        /** Delay before the dot flashes in milliseconds */
+        readonly pre_flash_duration: {
+            readonly type: ParameterType.INT;
+            readonly default: 2500;
+        };
+        /** Duration of the post-flash in milliseconds */
+        readonly post_flash_duration: {
+            readonly type: ParameterType.INT;
+            readonly default: 1500;
         };
         /** Total duration of the trial in milliseconds */
         readonly trial_duration: {
@@ -37,13 +52,24 @@ declare const info: {
         };
         /** 2-dimensional array of mouse data for playback */
         readonly playback: {
-            readonly type: ParameterType.OBJECT;
+            readonly type: ParameterType.COMPLEX;
             readonly array: true;
             readonly default: Array<{
                 dx: number;
                 dy: number;
                 t: number;
             }>;
+            readonly params: {
+                readonly dx: {
+                    readonly type: ParameterType.INT;
+                };
+                readonly dy: {
+                    readonly type: ParameterType.INT;
+                };
+                readonly t: {
+                    readonly type: ParameterType.INT;
+                };
+            };
         };
     };
     readonly data: {
@@ -80,10 +106,25 @@ declare class MovingDots2Plugin implements JsPsychPlugin<Info> {
                 readonly type: ParameterType.INT;
                 readonly default: 10;
             };
+            /** Maximum initial distance from the center location for dots */
+            readonly max_initial_distance: {
+                readonly type: ParameterType.INT;
+                readonly default: 100;
+            };
             /** Duration of the flash in milliseconds */
             readonly flash_duration: {
                 readonly type: ParameterType.INT;
                 readonly default: 200;
+            };
+            /** Delay before the dot flashes in milliseconds */
+            readonly pre_flash_duration: {
+                readonly type: ParameterType.INT;
+                readonly default: 2500;
+            };
+            /** Duration of the post-flash in milliseconds */
+            readonly post_flash_duration: {
+                readonly type: ParameterType.INT;
+                readonly default: 1500;
             };
             /** Total duration of the trial in milliseconds */
             readonly trial_duration: {
@@ -102,13 +143,24 @@ declare class MovingDots2Plugin implements JsPsychPlugin<Info> {
             };
             /** 2-dimensional array of mouse data for playback */
             readonly playback: {
-                readonly type: ParameterType.OBJECT;
+                readonly type: ParameterType.COMPLEX;
                 readonly array: true;
                 readonly default: Array<{
                     dx: number;
                     dy: number;
                     t: number;
                 }>;
+                readonly params: {
+                    readonly dx: {
+                        readonly type: ParameterType.INT;
+                    };
+                    readonly dy: {
+                        readonly type: ParameterType.INT;
+                    };
+                    readonly t: {
+                        readonly type: ParameterType.INT;
+                    };
+                };
             };
         };
         readonly data: {

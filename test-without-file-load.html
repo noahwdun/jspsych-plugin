@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My experiment</title>
+    <script src="https://unpkg.com/jspsych@8.2.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
+    <script src="plugin-moving-dots-2/dist/index.browser.js"></script>
+    <script src="trajectory2.js"></script>
+    <link href="https://unpkg.com/jspsych@8.2.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <style>
+      body {
+        background-color: white;
+      }
+      canvas {
+        background-color: rgb(191, 191, 191);
+        cursor: none;
+      }
+    </style>
+  </head>
+  <body>
+  </body>
+  <script>
+    /* initialize jsPsych */
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        console.log('Experiment finished');
+        // const trialData = jsPsych.data.get().values();
+        // const mouseData = trialData.map(trial => trial.mouse_data).flat();
+        // const blob = new Blob([JSON.stringify(mouseData)], { type: 'application/json' });
+        // const url = URL.createObjectURL(blob);
+        // const a = document.createElement('a');
+        // a.href = url;
+        // a.download = 'experiment_data.json';
+        // a.click();
+        // URL.revokeObjectURL(url);
+      }
+    });
+
+    /* create timeline */
+    var timeline = [];
+
+    /* define welcome message trial */
+    var movingdots = {
+      type: jsPsychPluginMovingDots2,
+      control_levels: [30, 70, 100], // Control change levels
+      dot_count: 10, // Number of dots
+      flash_duration: 200, // Flash duration in milliseconds
+      trial_duration: 5000, // Trial duration in milliseconds
+      initial_control_level: 100, // Initial control level
+      control_change_level: 100, // Control change level
+      playback: trajectory // Loaded playback data
+    };
+    timeline.push(movingdots);
+
+    /* start the experiment */
+    jsPsych.run(timeline);
+  </script>
+</html>
