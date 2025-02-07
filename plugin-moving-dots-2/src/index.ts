@@ -120,6 +120,25 @@ class MovingDots2Plugin implements JsPsychPlugin<Info> {
 
     let isFirstMove = true;
 
+
+    function sidebox(control, change) {
+      if (control == 100) {
+        document.getElementById("box1").style.backgroundColor = "black";
+      } else {
+        document.getElementById("box1").style.backgroundColor = "black";
+      }
+      if (change == 100) {
+        document.getElementById("box2").style.backgroundColor = "black";
+        document.getElementById("box3").style.backgroundColor = "black";
+      } else if (change == 70) {
+        document.getElementById("box2").style.backgroundColor = "white";
+        document.getElementById("box3").style.backgroundColor = "black";
+      } else {
+        document.getElementById("box2").style.backgroundColor = "black";
+        document.getElementById("box3").style.backgroundColor = "white";
+      }
+    }
+
     const initializeDots = () => {
       for (let i = 0; i < trial.dot_count; i++) {
         const angle = Math.random() * 2 * Math.PI;
@@ -259,6 +278,7 @@ class MovingDots2Plugin implements JsPsychPlugin<Info> {
       // run the next loop of the animation
       updateDots(dx, dy);
       renderDotsAndCross();
+      sidebox(trial.initial_control_level, trial.control_change_level);
       data.push({ dx, dy });
       dx = 0;
       dy = 0;
