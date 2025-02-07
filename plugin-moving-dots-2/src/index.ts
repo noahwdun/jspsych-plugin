@@ -8,11 +8,6 @@ const info = <const>{
   name: "plugin-moving-dots-2",
   version: version,
   parameters: {
-    /** Number of dots to display on the screen */
-    dot_count: {
-      type: ParameterType.INT,
-      default: 10,
-    },
     /** Maximum initial distance from the center location for dots */
     max_initial_distance: {
       type: ParameterType.INT,
@@ -42,6 +37,11 @@ const info = <const>{
     control_change_level: {
       type: ParameterType.INT,
       default: 30,
+    },
+    diode_heights: {
+      type: ParameterType.INT,
+      array: true,
+      default: [10, 70, 130, 190]
     },
     /** 2-dimensional array of mouse data for playback */
     playback: {
@@ -76,7 +76,7 @@ type Info = typeof info;
 /**
  * **plugin-moving-dots-2**
  *
- * Handles moving series of dots that move at the same speed in response to user input; one dot will flash red and change control level. Implemented as part of an experiment for COGS-219; replicating the paper "Control Changes the Way We Look at the World" by Wen & Haggard.
+ * Handles moving series of dots that move at the same speed in response to user input; one dot will flash red and change its control level. Implemented as part of an experiment for COGS-219; replicating the paper "Control Changes the Way We Look at the World" by Wen & Haggard.
  *
  * @author Ollie & Noah
  * @see {@link /plugin-moving-dots-2/README.md}
@@ -120,27 +120,8 @@ class MovingDots2Plugin implements JsPsychPlugin<Info> {
 
     let isFirstMove = true;
 
-
-    function sidebox(control, change) {
-      if (control == 100) {
-        document.getElementById("box1").style.backgroundColor = "black";
-      } else {
-        document.getElementById("box1").style.backgroundColor = "black";
-      }
-      if (change == 100) {
-        document.getElementById("box2").style.backgroundColor = "black";
-        document.getElementById("box3").style.backgroundColor = "black";
-      } else if (change == 70) {
-        document.getElementById("box2").style.backgroundColor = "white";
-        document.getElementById("box3").style.backgroundColor = "black";
-      } else {
-        document.getElementById("box2").style.backgroundColor = "black";
-        document.getElementById("box3").style.backgroundColor = "white";
-      }
-    }
-
     const initializeDots = () => {
-      for (let i = 0; i < trial.dot_count; i++) {
+      for (let i = 0; i < 10; i++) {
         const angle = Math.random() * 2 * Math.PI;
         const distance = Math.random() * trial.max_initial_distance;
         dots.push({
@@ -245,6 +226,93 @@ class MovingDots2Plugin implements JsPsychPlugin<Info> {
       });
     };
 
+    /**
+     * Renders side boxes and updates their colors based on control and change parameters.
+     * @param initialControl - The initial control level (0 or 1).
+     * @param controlChange - The control change level (0, 30, or 70).
+     * @param isFlashing - Whether the dot is currently flashing.
+     * @param diodeHeights - Array of heights for the boxes.
+     */
+    function renderSideBoxes(initialControl: number, controlChange: number, isFlashing: boolean, diodeHeights: number[]) {
+      const box1 = document.createElement("div");
+      const box2 = document.createElement("div");
+      const box3 = document.createElement("div");
+      const box4 = document.createElement("div");
+
+      const label1 = document.createElement("div");
+      const label2 = document.createElement("div");
+      const label3 = document.createElement("div");
+      const label4 = document.createElement("div");
+
+      box1.style.position = "fixed";
+      box1.style.bottom = `${diodeHeights[0]}px`;
+      box1.style.right = "10px";
+      box1.style.height = "5vh";
+      box1.style.width = "5vh";
+      box1.style.backgroundColor = "black";
+
+      box2.style.position = "fixed";
+      box2.style.bottom = `${diodeHeights[1]}px`;
+      box2.style.right = "10px";
+      box2.style.height = "5vh";
+      box2.style.width = "5vh";
+      box2.style.backgroundColor = "black";
+
+      box3.style.position = "fixed";
+      box3.style.bottom = `${diodeHeights[2]}px`;
+      box3.style.right = "10px";
+      box3.style.height = "5vh";
+      box3.style.width = "5vh";
+      box3.style.backgroundColor = "black";
+
+      box4.style.position = "fixed";
+      box4.style.bottom = `${diodeHeights[3]}px`;
+      box4.style.right = "10px";
+      box4.style.height = "5vh";
+      box4.style.width = "5vh";
+      box4.style.backgroundColor = isFlashing ? "white" : "black";
+
+      if (isFlashing) {
+        box1.style.backgroundColor = initialControl === 100 ? "white" : "black";
+        box2.style.backgroundColor = controlChange === 30 ? "white" : "black";
+        box3.style.backgroundColor = controlChange === 70 ? "white" : "black";
+      }
+
+      label1.style.position = "fixed";
+      label1.style.bottom = `${diodeHeights[0] + 35}px`;
+      label1.style.right = "10px";
+      label1.style.fontSize = "12px";
+      label1.innerText = "initial";
+
+      label2.style.position = "fixed";
+      label2.style.bottom = `${diodeHeights[1] + 35}px`;
+      label2.style.right = "10px";
+      label2.style.fontSize = "12px";
+      label2.innerText = "change1";
+
+      label3.style.position = "fixed";
+      label3.style.bottom = `${diodeHeights[2] + 35}px`;
+      label3.style.right = "10px";
+      label3.style.fontSize = "12px";
+      label3.innerText = "change2";
+
+      label4.style.position = "fixed";
+      label4.style.bottom = `${diodeHeights[3] + 35}px`;
+      label4.style.right = "10px";
+      label4.style.fontSize = "12px";
+      label4.innerText = "flash";
+
+      document.body.appendChild(box1);
+      document.body.appendChild(box2);
+      document.body.appendChild(box3);
+      document.body.appendChild(box4);
+
+      document.body.appendChild(label1);
+      document.body.appendChild(label2);
+      document.body.appendChild(label3);
+      document.body.appendChild(label4);
+    }
+
     const animate = () => {
       const currentTime = Date.now();
       const elapsedTime = currentTime - startTime;
@@ -275,10 +343,13 @@ class MovingDots2Plugin implements JsPsychPlugin<Info> {
           dots[flashIndex].control = dots[flashIndex].control + controlChange;
         }
       }
+
+      // Render side boxes
+      renderSideBoxes(trial.initial_control_level, trial.control_change_level, isFlashing, trial.diode_heights);
+
       // run the next loop of the animation
       updateDots(dx, dy);
       renderDotsAndCross();
-      sidebox(trial.initial_control_level, trial.control_change_level);
       data.push({ dx, dy });
       dx = 0;
       dy = 0;

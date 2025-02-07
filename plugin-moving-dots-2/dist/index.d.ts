@@ -4,17 +4,6 @@ declare const info: {
     readonly name: "plugin-moving-dots-2";
     readonly version: string;
     readonly parameters: {
-        /** Array of control change levels (e.g., 30%, 70%, 100%) */
-        readonly control_levels: {
-            readonly type: ParameterType.INT;
-            readonly array: true;
-            readonly default: readonly [30, 70, 100];
-        };
-        /** Number of dots to display on the screen */
-        readonly dot_count: {
-            readonly type: ParameterType.INT;
-            readonly default: 10;
-        };
         /** Maximum initial distance from the center location for dots */
         readonly max_initial_distance: {
             readonly type: ParameterType.INT;
@@ -44,6 +33,11 @@ declare const info: {
         readonly control_change_level: {
             readonly type: ParameterType.INT;
             readonly default: 30;
+        };
+        readonly diode_heights: {
+            readonly type: ParameterType.INT;
+            readonly array: true;
+            readonly default: readonly [10, 70, 130, 190];
         };
         /** 2-dimensional array of mouse data for playback */
         readonly playback: {
@@ -79,7 +73,7 @@ type Info = typeof info;
 /**
  * **plugin-moving-dots-2**
  *
- * Handles moving series of dots that move at the same speed in response to user input; one dot will flash red and change control level. Implemented as part of an experiment for COGS-219; replicating the paper "Control Changes the Way We Look at the World" by Wen & Haggard.
+ * Handles moving series of dots that move at the same speed in response to user input; one dot will flash red and change its control level. Implemented as part of an experiment for COGS-219; replicating the paper "Control Changes the Way We Look at the World" by Wen & Haggard.
  *
  * @author Ollie & Noah
  * @see {@link /plugin-moving-dots-2/README.md}
@@ -90,17 +84,6 @@ declare class MovingDots2Plugin implements JsPsychPlugin<Info> {
         readonly name: "plugin-moving-dots-2";
         readonly version: string;
         readonly parameters: {
-            /** Array of control change levels (e.g., 30%, 70%, 100%) */
-            readonly control_levels: {
-                readonly type: ParameterType.INT;
-                readonly array: true;
-                readonly default: readonly [30, 70, 100];
-            };
-            /** Number of dots to display on the screen */
-            readonly dot_count: {
-                readonly type: ParameterType.INT;
-                readonly default: 10;
-            };
             /** Maximum initial distance from the center location for dots */
             readonly max_initial_distance: {
                 readonly type: ParameterType.INT;
@@ -130,6 +113,11 @@ declare class MovingDots2Plugin implements JsPsychPlugin<Info> {
             readonly control_change_level: {
                 readonly type: ParameterType.INT;
                 readonly default: 30;
+            };
+            readonly diode_heights: {
+                readonly type: ParameterType.INT;
+                readonly array: true;
+                readonly default: readonly [10, 70, 130, 190];
             };
             /** 2-dimensional array of mouse data for playback */
             readonly playback: {

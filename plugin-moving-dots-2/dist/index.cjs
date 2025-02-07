@@ -8,17 +8,6 @@ const info = {
   name: "plugin-moving-dots-2",
   version,
   parameters: {
-    /** Array of control change levels (e.g., 30%, 70%, 100%) */
-    control_levels: {
-      type: jspsych.ParameterType.INT,
-      array: true,
-      default: [30, 70, 100]
-    },
-    /** Number of dots to display on the screen */
-    dot_count: {
-      type: jspsych.ParameterType.INT,
-      default: 10
-    },
     /** Maximum initial distance from the center location for dots */
     max_initial_distance: {
       type: jspsych.ParameterType.INT,
@@ -48,6 +37,11 @@ const info = {
     control_change_level: {
       type: jspsych.ParameterType.INT,
       default: 30
+    },
+    diode_heights: {
+      type: jspsych.ParameterType.INT,
+      array: true,
+      default: [10, 70, 130, 190]
     },
     /** 2-dimensional array of mouse data for playback */
     playback: {
@@ -101,7 +95,7 @@ class MovingDots2Plugin {
     let dx = 0;
     let dy = 0;
     const initializeDots = () => {
-      for (let i = 0; i < trial.dot_count; i++) {
+      for (let i = 0; i < 10; i++) {
         const angle = Math.random() * 2 * Math.PI;
         const distance = Math.random() * trial.max_initial_distance;
         dots.push({
@@ -173,6 +167,73 @@ class MovingDots2Plugin {
         mouse_data: data
       });
     };
+    function renderSideBoxes(initialControl, controlChange2, isFlashing2, diodeHeights) {
+      const box1 = document.createElement("div");
+      const box2 = document.createElement("div");
+      const box3 = document.createElement("div");
+      const box4 = document.createElement("div");
+      const label1 = document.createElement("div");
+      const label2 = document.createElement("div");
+      const label3 = document.createElement("div");
+      const label4 = document.createElement("div");
+      box1.style.position = "fixed";
+      box1.style.bottom = `${diodeHeights[0]}px`;
+      box1.style.right = "10px";
+      box1.style.height = "5vh";
+      box1.style.width = "5vh";
+      box1.style.backgroundColor = "black";
+      box2.style.position = "fixed";
+      box2.style.bottom = `${diodeHeights[1]}px`;
+      box2.style.right = "10px";
+      box2.style.height = "5vh";
+      box2.style.width = "5vh";
+      box2.style.backgroundColor = "black";
+      box3.style.position = "fixed";
+      box3.style.bottom = `${diodeHeights[2]}px`;
+      box3.style.right = "10px";
+      box3.style.height = "5vh";
+      box3.style.width = "5vh";
+      box3.style.backgroundColor = "black";
+      box4.style.position = "fixed";
+      box4.style.bottom = `${diodeHeights[3]}px`;
+      box4.style.right = "10px";
+      box4.style.height = "5vh";
+      box4.style.width = "5vh";
+      box4.style.backgroundColor = isFlashing2 ? "white" : "black";
+      if (isFlashing2) {
+        box1.style.backgroundColor = initialControl === 100 ? "white" : "black";
+        box2.style.backgroundColor = controlChange2 === 30 ? "white" : "black";
+        box3.style.backgroundColor = controlChange2 === 70 ? "white" : "black";
+      }
+      label1.style.position = "fixed";
+      label1.style.bottom = `${diodeHeights[0] + 35}px`;
+      label1.style.right = "10px";
+      label1.style.fontSize = "12px";
+      label1.innerText = "initial";
+      label2.style.position = "fixed";
+      label2.style.bottom = `${diodeHeights[1] + 35}px`;
+      label2.style.right = "10px";
+      label2.style.fontSize = "12px";
+      label2.innerText = "change1";
+      label3.style.position = "fixed";
+      label3.style.bottom = `${diodeHeights[2] + 35}px`;
+      label3.style.right = "10px";
+      label3.style.fontSize = "12px";
+      label3.innerText = "change2";
+      label4.style.position = "fixed";
+      label4.style.bottom = `${diodeHeights[3] + 35}px`;
+      label4.style.right = "10px";
+      label4.style.fontSize = "12px";
+      label4.innerText = "flash";
+      document.body.appendChild(box1);
+      document.body.appendChild(box2);
+      document.body.appendChild(box3);
+      document.body.appendChild(box4);
+      document.body.appendChild(label1);
+      document.body.appendChild(label2);
+      document.body.appendChild(label3);
+      document.body.appendChild(label4);
+    }
     const animate = () => {
       const currentTime = Date.now();
       const elapsedTime = currentTime - startTime;
@@ -193,6 +254,7 @@ class MovingDots2Plugin {
           dots[flashIndex].control = dots[flashIndex].control + controlChange;
         }
       }
+      renderSideBoxes(trial.initial_control_level, trial.control_change_level, isFlashing, trial.diode_heights);
       updateDots(dx, dy);
       renderDotsAndCross();
       data.push({ dx, dy });

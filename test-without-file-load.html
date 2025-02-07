@@ -11,6 +11,7 @@
       canvas {
         background-color: rgb(191, 191, 191);
         cursor: none;
+        display: block;
       }
     </style>
   </head>
@@ -41,7 +42,8 @@
       pre_flash_duration: 1500, // Pre-flash duration in milliseconds
       post_flash_duration: 10000, // Post-flash duration in milliseconds
       initial_control_level: 100, // Initial control level
-      control_change_level: 0, // Control change level
+      control_change_level: 30, // Control change level
+      diode_heights: [10, 70, 130, 190], // Diode heights
       playback: trajectory // Loaded playback data
     };
     timeline.push(movingdots);

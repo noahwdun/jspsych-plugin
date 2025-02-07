@@ -16,6 +16,7 @@
       canvas {
         background-color: rgb(191, 191, 191);
         cursor: none;
+        display: block;
       }
     </style>
   </head>
@@ -55,6 +56,7 @@
       post_flash_duration: 5000, // Post-flash duration in milliseconds
       initial_control_level: 100, // Initial control level
       control_change_level: 0, // Control change level
+      diode_heights: [10, 70, 130, 190], // Diode heights
       playback: trajectory, // Loaded playback data
       data: { task: 'movingdots'}
     };
