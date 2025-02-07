@@ -218,7 +218,8 @@ class MovingDots2Plugin implements JsPsychPlugin<Info> {
 
     // End trial
     const endTrial = () => {
-      document.removeEventListener("mousemove", mouseMoveListener);
+      document.exitPointerLock();
+      canvas.removeEventListener("mousemove", mouseMoveListener);
       display_element.innerHTML = ""; // Clear the canvas
       this.jsPsych.finishTrial({
         control_change: controlChange,
@@ -359,7 +360,8 @@ class MovingDots2Plugin implements JsPsychPlugin<Info> {
 
     initializeDots();
     renderDotsAndCross();
-    document.addEventListener("mousemove", mouseMoveListener);
+    canvas.requestPointerLock({ unadjustedMovement: false });
+    canvas.addEventListener("mousemove", mouseMoveListener);
     animate();
   }
 }
