@@ -8,9 +8,6 @@
     <script src="trajectory2.js"></script>
     <link href="https://unpkg.com/jspsych@8.2.0/css/jspsych.css" rel="stylesheet" type="text/css" />
     <style>
-      body {
-        background-color: white;
-      }
       canvas {
         background-color: rgb(191, 191, 191);
         cursor: none;
@@ -41,8 +38,6 @@
     /* define welcome message trial */
     var movingdots = {
       type: jsPsychPluginMovingDots2,
-      dot_count: 10, // Number of dots
-      flash_duration: 200, // Flash duration in milliseconds
       pre_flash_duration: 1500, // Pre-flash duration in milliseconds
       post_flash_duration: 10000, // Post-flash duration in milliseconds
       initial_control_level: 100, // Initial control level
