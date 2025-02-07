@@ -9,7 +9,7 @@ const info = {
     /** Maximum initial distance from the center location for dots */
     max_initial_distance: {
       type: ParameterType.INT,
-      default: 100
+      default: 45
     },
     /** Duration of the flash in milliseconds */
     flash_duration: {
@@ -116,7 +116,7 @@ class MovingDots2Plugin {
       ctx.stroke();
       dots.forEach((dot, index) => {
         ctx.beginPath();
-        ctx.arc(dot.x, dot.y, 5, 0, 2 * Math.PI);
+        ctx.arc(dot.x, dot.y, 7, 0, 2 * Math.PI);
         if (isFlashing) {
           ctx.fillStyle = index === flashIndex ? "red" : "black";
         } else {

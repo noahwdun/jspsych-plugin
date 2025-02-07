@@ -7,7 +7,7 @@ declare const info: {
         /** Maximum initial distance from the center location for dots */
         readonly max_initial_distance: {
             readonly type: ParameterType.INT;
-            readonly default: 100;
+            readonly default: 45;
         };
         /** Duration of the flash in milliseconds */
         readonly flash_duration: {
@@ -87,7 +87,7 @@ declare class MovingDots2Plugin implements JsPsychPlugin<Info> {
             /** Maximum initial distance from the center location for dots */
             readonly max_initial_distance: {
                 readonly type: ParameterType.INT;
-                readonly default: 100;
+                readonly default: 45;
             };
             /** Duration of the flash in milliseconds */
             readonly flash_duration: {
