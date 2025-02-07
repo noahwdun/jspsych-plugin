@@ -118,7 +118,7 @@ class MovingDots2Plugin {
       ctx.stroke();
       dots.forEach((dot, index) => {
         ctx.beginPath();
-        ctx.arc(dot.x, dot.y, 7, 0, 2 * Math.PI);
+        ctx.arc(dot.x, dot.y, 3.5, 0, 2 * Math.PI);
         if (isFlashing) {
           ctx.fillStyle = index === flashIndex ? "red" : "black";
         } else {
